@@ -14,9 +14,9 @@ This surge in online reviews has also led to the proliferation of fake and spam 
 
 My study utilized a dataset containing 24,000 reviews, split between 20,000 original reviews (real) and 4,000 code-generated (fake) reviews. This dataset encompasses reviews from ten categories, reflecting a broad spectrum of consumer products and services.
 
-![Alt text](Label.png?raw=true "Optional Title")
-![Alt text](Categories.png?raw=true "Optional Title")
-![Alt text](Ratings.png?raw=true "Optional Title")
+![Alt text](images/Label.png?raw=true "Optional Title")
+![Alt text](images/Categories.png?raw=true "Optional Title")
+![Alt text](images/Ratings.png?raw=true "Optional Title")
 
 
 ## Data Preprocessing and Feature Selection
@@ -38,13 +38,13 @@ These scores were then added as a numerical feature to the dataset.
 The feature selection process was informed by the hypothesis that certain characteristics of the review text can be indicative of its authenticity. To test this hypothesis, I engineered several features:
 
 - **Sentiment Scores:**  As part of the feature engineering, I included the sentiment scores derived from the sentiment analysis. The sentiment of a review text is a valuable feature as fake reviews might systematically differ in sentiment compared to genuine ones.
-![Alt text](sentiment_socre.png?raw=true "Optional Title")
+![Alt text](images/sentiment_socre.png?raw=true "Optional Title")
 - **Review Char Length:** The character length of reviews was computed and included as a feature under the assumption that the length could correlate with the review's authenticity. Fake reviews might be shorter or unusually long when compared to genuine reviews.
-![Alt text](review_length.png?raw=true "Optional Title")
+![Alt text](images/review_length.png?raw=true "Optional Title")
 - **Spelling Errors Count:** I introduced a spelling error count feature by utilizing the phunspell library to identify and count misspellings within the text. This feature is predicated on the idea that fake reviews may exhibit different patterns of spelling errors.
-![Alt text](spelling.png?raw=true "Optional Title")
+![Alt text](images/spelling.png?raw=true "Optional Title")
 - **Review Word Length:** *I added the number of words in each review for similar reasons as the character length and I hoped it might provide some additional insight along with character length. As you can see the two graphs have similar distributions.
-![Alt text](word_length.png?raw=true "Optional Title")
+![Alt text](images/word_length.png?raw=true "Optional Title")
 
 
 
@@ -57,11 +57,11 @@ I built a decision tree classifier, random forest classifier, support vector cla
 ### Decision Tree Model
 After training the decision tree model and running it against the test data these were the results 
 
-![Alt text](DT_matrix_pretune.png?raw=true "Optional Title")
+![Alt text](images/DT_matrix_pretune.png?raw=true "Optional Title")
 
 And the metrics were
 
-![Alt text](DT_metrics_pretune.png?raw=true "Optional Title")
+![Alt text](images/DT_metrics_pretune.png?raw=true "Optional Title")
 
 The model performs decently in terms of accuracy but has quite poor precision and recall. The decision tree could be overfitting to the training data. The number of FPs and FNs also suggests some room for improvement particularly in reducing the misclassification of real reviews as fake. This could be due to several factors including the complexity of the decision boundaries or insufficient depth or pruning in the decision tree.
 
@@ -69,11 +69,11 @@ The model performs decently in terms of accuracy but has quite poor precision an
 
 After training the random forest and running it against the test data these were the results 
 
-![Alt text](RF_matrix_pretune.png?raw=true "Optional Title")
+![Alt text](images/RF_matrix_pretune.png?raw=true "Optional Title")
 
 And the metrics were
 
-![Alt text](RF_metrics_pretune.png?raw=true "Optional Title")
+![Alt text](images/RF_metrics_pretune.png?raw=true "Optional Title")
 
 After using the random forest algorithm the results showed a slight improvement in correctly identifying real and fake reviews over the decision tree classifier. The increase in true positives (TP) and true negatives (TN) staying about the same suggests that the random forest model is better at picking up the complex patterns in the data. The random forest's slight improvement over the decision tree is due to its ensemble nature. It aggregates the results of many decision trees and reduces the risk of overfitting. However, the improvement is not drastic as I can see in the statistics.
 
@@ -81,11 +81,11 @@ After using the random forest algorithm the results showed a slight improvement 
 
 After training the SVC and running it against the test data these were the results 
 
-![Alt text](SVC_matrix_pretune.png?raw=true "Optional Title")
+![Alt text](images/SVC_matrix_pretune.png?raw=true "Optional Title")
 
 And the metrics were
 
-![Alt text](SVC_metrics_pretune.png?raw=true "Optional Title")
+![Alt text](images/SVC_metrics_pretune.png?raw=true "Optional Title")
 
 As the metrics show the model has a high recall suggesting it is quite good at flagging fake reviews. However, the precision metric is quite low which means the model tends to incorrectly label genuine reviews as fake. These recall and precision rates shows that while the SVC is efficient at identifying a high volume of fake reviews, it does so at the expense of incorrectly categorizing some real reviews. This could be a result of the model's high sensitivity to the minority class
 
@@ -93,11 +93,11 @@ As the metrics show the model has a high recall suggesting it is quite good at f
 
 After training the XGBoost and running it against the test data these were the results 
 
-![Alt text](XG_matrix.png?raw=true "Optional Title")
+![Alt text](images/XG_matrix.png?raw=true "Optional Title")
 
 And the metrics were
 
-![Alt text](XG_metrics.png?raw=true "Optional Title")
+![Alt text](images/XG_metrics.png?raw=true "Optional Title")
 
 For the XGBoost I also used Optuna. Optuna is an open-source hyperparameter optimization framework that automates the process of finding the most effective hyperparameters. It systematically searches through various combinations of hyperparameters to determine the best set that improves the performance. After running the model with Optuna and got the metrics above. While the XGboost has a lower recall than the SVC model it outperforms it in the other statistics. It also outperforms the decision tree classifier and the random forest classifier in all the metrics. It has a higher accuracy rate which points to an overall better generalization capability. The number of true positives and true negatives suggests that the model can effectively discern between real and fake reviews, while the false positives and false negatives show a decrease compared to the SVC model. This means it has a more balanced classification with fewer instances of real reviews being mislabeled as fake.
 
@@ -109,7 +109,7 @@ I employed a diverse array of classifiers, including the Random Forest Classifie
 
 Subsequent evaluation of the remaining models showcased relatively comparable confusion matrices. The Decision Tree Classifier demonstrated solid performance, but the Random Forest and XGBoost outperformed it in all metrics. Specifically, The Random Forest achieved a 76% accuracy rate, 33% precision, 36% recall, and a 60% ROC-AUC. Meanwhile, the XGBoost model excelled with a 77% accuracy, 37% precision, 46% recall, and 65% ROC-AUC. Below is a chart comparing the f1 scores of each classifier.
 
-![Alt text](fscore_comp.png?raw=true "Optional Title")
+![Alt text](images/fscore_comp.png?raw=true "Optional Title")
 
 It is evident that XGBoost is the frontrunner among the models. While the results showcase proficiency, there remains room for improvement, especially considering that other research papers have achieved accuracy rates surpassing the 80% threshold. 
 
